@@ -22,11 +22,11 @@ producer = KafkaProducer(bootstrap_servers=config['DEFAULT']['bootstrap.servers'
                         value_serializer=lambda x: json.dumps(x).encode('utf-8'))
 
 import logging
-logging.basicConfig(handlers=[logging.FileHandler(filename="logapp.log", 
+logging.basicConfig(handlers=[logging.FileHandler(filename="logapp_{0}.log".format(str(datetime.now().date())), 
                                                  encoding='utf-8', mode='a+')], level=logging.INFO)
 
 logging.info(str(datetime.now()) + " - Création du client Socrata API")
-client = Socrata("data.cityofchicago.org", "UVhpgWMiQV7Bflv9J2aIlzBag")
+client = Socrata(config['SOCRATA']['api_url'], config['SOCRATA']['api_key'])
 
 while True : 
     logging.info(str(datetime.now()) + " - Début de la boucle infini")
@@ -35,7 +35,7 @@ while True :
         logging.info(str(datetime.now()) + " - La last_value_date n'existe pas on requete toutes les données")
         # First 20000 results, returned as JSON from API / converted to Python list of
         # dictionaries by sodapy.
-        results = client.get("n4j6-wkkf", limit=20000, order="_last_updt DESC")
+        results = client.get(config['SOCRATA']['dataset_id'], limit=20000, order="_last_updt DESC")
         
     # else we read only the last line of it in order to not load all the file in the memory
     else :
@@ -45,7 +45,7 @@ while True :
             last_value = line
             logging.info(str(datetime.now()) + " - last_value_date récupérée : {0}".format(last_value))
         
-        results = client.get("n4j6-wkkf", limit=200000, order="_last_updt DESC", where="_last_updt > '{0}'".format(last_value))
+        results = client.get(config['SOCRATA']['dataset_id'], limit=200000, order="_last_updt DESC", where="_last_updt > '{0}'".format(last_value))
     
     results_df = pd.DataFrame.from_records(results)
     

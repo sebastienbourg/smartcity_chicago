@@ -22,7 +22,7 @@ producer = KafkaProducer(bootstrap_servers=config['DEFAULT']['bootstrap.servers'
                         value_serializer=lambda x: json.dumps(x).encode('utf-8'))
 
 import logging
-logging.basicConfig(handlers=[logging.FileHandler(filename="logapp_{0}.log".format(str(datetime.now().date())), 
+logging.basicConfig(handlers=[logging.FileHandler(filename="logapp/logapp_{0}.log".format(str(datetime.now().date())), 
                                                  encoding='utf-8', mode='a+')], level=logging.INFO)
 
 logging.info(str(datetime.now()) + " - Création du client Socrata API")

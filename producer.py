@@ -23,7 +23,7 @@ producer = KafkaProducer(bootstrap_servers=config['DEFAULT']['bootstrap.servers'
 
 import logging
 logging.basicConfig(handlers=[logging.FileHandler(filename="logapp/logapp_{0}.log".format(str(datetime.now().date())), 
-                                                 encoding='utf-8', mode='a+')], level=logging.INFO)
+                                                 encoding='utf-8', mode='a+')], level=logging.INFO, force=True)
 
 logging.info(str(datetime.now()) + " - Création du client Socrata API")
 client = Socrata(config['SOCRATA']['api_url'], config['SOCRATA']['api_key'])
@@ -31,7 +31,7 @@ client = Socrata(config['SOCRATA']['api_url'], config['SOCRATA']['api_key'])
 while True : 
     logging.info(str(datetime.now()) + " - Début de la boucle infini")
     logging.basicConfig(handlers=[logging.FileHandler(filename="logapp/logapp_{0}.log".format(str(datetime.now().date())), 
-                                                 encoding='utf-8', mode='a+')], level=logging.INFO)
+                                                 encoding='utf-8', mode='a+')], level=logging.INFO, force=True)
     # if the file is empty we don't try to read it
     if os.stat("last_value_date").st_size == 0 :
         logging.info(str(datetime.now()) + " - La last_value_date n'existe pas on requete toutes les données")

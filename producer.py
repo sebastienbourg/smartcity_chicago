@@ -19,7 +19,8 @@ producer = KafkaProducer(bootstrap_servers=config['DEFAULT']['bootstrap.servers'
                         sasl_mechanism = config['DEFAULT']['sasl.mechanisms'], 
                         sasl_plain_username = config['DEFAULT']['sasl.username'], 
                         sasl_plain_password  = config['DEFAULT']['sasl.password'], 
-                        value_serializer=lambda x: json.dumps(x).encode('utf-8'))
+                        value_serializer=lambda x: json.dumps(x).encode('utf-8'),
+                        connections_max_idle_ms=3600000)
 
 import logging
 logging.basicConfig(handlers=[logging.FileHandler(filename="logapp/logapp_{0}.log".format(str(datetime.now().date())), 
@@ -79,6 +80,4 @@ while True :
     logging.info(str(datetime.now()) + " - Début du sleep de 5 min")
     time.sleep(300)
     logging.info(str(datetime.now()) + " - Sortie du sleep")
-    
-
     
